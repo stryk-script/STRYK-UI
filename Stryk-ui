@@ -1,72 +1,70 @@
--- [[ STRYK UI FRAMEWORK - SOURCE CODE ]]
+-- [[ STRYK UI FRAMEWORK - OFFICIAL SOURCE CODE ]]
 local StrykUI = {}
 StrykUI.__index = StrykUI
 
 function StrykUI:CreateWindow(config)
     local windowName = config.Name or "Stryk Hub"
     
-    -- 1. Buat Core Gui (Biar aman dan tidak gampang dideteksi anti-cheat biasa)
+    -- Core ScreenGui (Menggunakan proteksi deteksi GUI tersembunyi)
     local ScreenGui = Instance.new("ScreenGui")
     ScreenGui.Name = "StrykUI_Root"
     ScreenGui.ResetOnSpawn = false
     
-    -- Proteksi Synapse / Delta CoreGui
-    if syn and syn.protect_gui then
+    if gethui then
+        ScreenGui.Parent = gethui()
+    elseif syn and syn.protect_gui then
         syn.protect_gui(ScreenGui)
         ScreenGui.Parent = game:GetService("CoreGui")
-    elseif gethui then
-        ScreenGui.Parent = gethui()
     else
         ScreenGui.Parent = game:GetService("CoreGui")
     end
     
-    -- 2. Main Frame (Bingkai Utama Menu)
+    -- Main Frame (Bingkai Utama Menu)
     local MainFrame = Instance.new("Frame")
     MainFrame.Name = "Main"
-    MainFrame.Size = UDim2.new(0, 550, 0, 380)
-    MainFrame.Position = UDim2.new(0.5, -275, 0.5, -190)
-    MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 25) -- Tema Gelap Premium
+    MainFrame.Size = UDim2.new(0, 520, 0, 360)
+    MainFrame.Position = UDim2.new(0.5, -260, 0.5, -180)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 24) -- Tema Gelap Premium
     MainFrame.BorderSizePixel = 0
     MainFrame.Active = true
-    MainFrame.Draggable = true -- Biar menu bisa digeser di HP/PC
+    MainFrame.Draggable = true -- Bisa digeser lancar di HP/PC
     MainFrame.Parent = ScreenGui
     
-    -- Membuat Sudut Melengkung Halus (UICorner)
     local MainCorner = Instance.new("UICorner")
-    MainCorner.CornerRadius = UDim.new(0, 12)
+    MainCorner.CornerRadius = UDim.new(0, 10)
     MainCorner.Parent = MainFrame
     
-    -- 3. Topbar (Bagian Atas Judul)
+    -- Topbar (Bagian Atas Menu)
     local Topbar = Instance.new("Frame")
     Topbar.Name = "Topbar"
     Topbar.Size = UDim2.new(1, 0, 0, 45)
-    Topbar.BackgroundColor3 = Color3.fromRGB(28, 28, 35)
+    Topbar.BackgroundColor3 = Color3.fromRGB(25, 25, 32)
     Topbar.BorderSizePixel = 0
     Topbar.Parent = MainFrame
     
     local TopbarCorner = Instance.new("UICorner")
-    TopbarCorner.CornerRadius = UDim.new(0, 12)
+    TopbarCorner.CornerRadius = UDim.new(0, 10)
     TopbarCorner.Parent = Topbar
     
-    -- Judul Menu
+    -- Judul Hub
     local TitleLabel = Instance.new("TextLabel")
     TitleLabel.Size = UDim2.new(1, -60, 1, 0)
-    TitleLabel.Position = UDim2.new(0, 20, 0, 0)
+    TitleLabel.Position = UDim2.new(0, 15, 0, 0)
     TitleLabel.Text = windowName
     TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TitleLabel.TextSize = 18
+    TitleLabel.TextSize = 16
     TitleLabel.Font = Enum.Font.GothamBold
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
     TitleLabel.BackgroundTransparency = 1
     TitleLabel.Parent = Topbar
     
-    -- Tombol Tutup (X)
+    -- Tombol Tutup Menu (X)
     local CloseButton = Instance.new("TextButton")
     CloseButton.Size = UDim2.new(0, 35, 0, 35)
     CloseButton.Position = UDim2.new(1, -45, 0, 5)
     CloseButton.Text = "X"
-    CloseButton.TextColor3 = Color3.fromRGB(255, 100, 100)
-    CloseButton.TextSize = 16
+    CloseButton.TextColor3 = Color3.fromRGB(240, 90, 90)
+    CloseButton.TextSize = 15
     CloseButton.Font = Enum.Font.GothamBold
     CloseButton.BackgroundTransparency = 1
     CloseButton.Parent = Topbar
@@ -75,63 +73,60 @@ function StrykUI:CreateWindow(config)
         ScreenGui:Destroy()
     end)
     
-    -- 4. Sidebar (Menu Navigasi Samping)
+    -- Sidebar (Navigasi Menu Samping)
     local Sidebar = Instance.new("Frame")
     Sidebar.Name = "Sidebar"
-    Sidebar.Size = UDim2.new(0, 150, 1, -45)
+    Sidebar.Size = UDim2.new(0, 140, 1, -45)
     Sidebar.Position = UDim2.new(0, 0, 0, 45)
-    Sidebar.BackgroundColor3 = Color3.fromRGB(24, 24, 30)
+    Sidebar.BackgroundColor3 = Color3.fromRGB(22, 22, 28)
     Sidebar.BorderSizePixel = 0
     Sidebar.Parent = MainFrame
     
     local SidebarLayout = Instance.new("UIListLayout")
-    SidebarLayout.Padding = UDim.new(0, 5)
+    SidebarLayout.Padding = UDim.new(0, 6)
     SidebarLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
     SidebarLayout.SortOrder = Enum.SortOrder.LayoutOrder
     SidebarLayout.Parent = Sidebar
     
-    -- Padding dalam Sidebar
     local SidebarPadding = Instance.new("UIPadding")
     SidebarPadding.PaddingTop = UDim.new(0, 10)
     SidebarPadding.Parent = Sidebar
     
-    -- 5. Container (Wadah Isi Konten Fitur)
+    -- Container (Wadah Isi Fitur)
     local Container = Instance.new("Frame")
     Container.Name = "Container"
-    Container.Size = UDim2.new(1, -150, 1, -45)
-    Container.Position = UDim2.new(0, 150, 0, 45)
+    Container.Size = UDim2.new(1, -140, 1, -45)
+    Container.Position = UDim2.new(0, 140, 0, 45)
     Container.BackgroundTransparency = 1
     Container.Parent = MainFrame
     
-    local windowObj = {
-        MainFrame = MainFrame,
-        Sidebar = Sidebar,
-        Container = Container,
-        Tabs = {}
-    }
+    local windowObj = {ScreenGui = ScreenGui, Tabs = {}}
+    local isFirstTab = true
     
-    -- Fungsi Membuat Tab Baru Internal
+    -- Fungsi Membuat Tab Baru
     function windowObj:CreateTab(tabName)
         local TabButton = Instance.new("TextButton")
-        TabButton.Size = UDim2.new(0, 130, 0, 35)
-        TabButton.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+        TabButton.Size = UDim2.new(0, 120, 0, 32)
+        TabButton.BackgroundColor3 = Color3.fromRGB(32, 32, 42)
         TabButton.Text = tabName
-        TabButton.TextColor3 = Color3.fromRGB(200, 200, 200)
-        TabButton.TextSize = 14
+        TabButton.TextColor3 = Color3.fromRGB(230, 230, 230)
+        TabButton.TextSize = 13
         TabButton.Font = Enum.Font.GothamSemibold
         TabButton.Parent = Sidebar
         
         local btnCorner = Instance.new("UICorner")
-        btnCorner.CornerRadius = UDim.new(0, 6)
+        btnCorner.CornerRadius = UDim.new(0, 5)
         btnCorner.Parent = TabButton
         
-        -- Halaman Konten untuk Tab Ini
+        -- Halaman Konten scrolling
         local Page = Instance.new("ScrollingFrame")
         Page.Size = UDim2.new(1, 0, 1, 0)
         Page.BackgroundTransparency = 1
-        Page.Visible = #Sidebar:GetChildren() == 3 -- Tab pertama otomatis terbuka
-        Page.ScrollBarThickness = 4
+        Page.Visible = isFirstTab
+        Page.ScrollBarThickness = 3
+        Page.CanvasSize = UDim2.new(0, 0, 0, 0)
         Page.Parent = Container
+        isFirstTab = false
         
         local PageLayout = Instance.new("UIListLayout")
         PageLayout.Padding = UDim.new(0, 8)
@@ -139,11 +134,14 @@ function StrykUI:CreateWindow(config)
         PageLayout.SortOrder = Enum.SortOrder.LayoutOrder
         PageLayout.Parent = Page
         
+        PageLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+            Page.CanvasSize = UDim2.new(0, 0, 0, PageLayout.AbsoluteContentSize.Y + 20)
+        end)
+        
         local PagePadding = Instance.new("UIPadding")
-        PagePadding.PaddingTop = UDim.new(0, 15)
+        PagePadding.PaddingTop = UDim.new(0, 12)
         PagePadding.Parent = Page
         
-        -- Klik Tab untuk Pindah Halaman
         TabButton.MouseButton1Click:Connect(function()
             for _, child in pairs(Container:GetChildren()) do
                 if child:IsA("ScrollingFrame") then child.Visible = false end
@@ -153,95 +151,99 @@ function StrykUI:CreateWindow(config)
         
         local tabObj = {}
         
-        -- Fungsi Membuat Button Internal
+        -- Fungsi Membuat Button Komponen
         function tabObj:CreateButton(btnConfig)
             local btnName = btnConfig.Name or "Button"
             local callback = btnConfig.Callback or function() end
             
             local NewButton = Instance.new("TextButton")
-            NewButton.Size = UDim2.new(0, 360, 0, 40)
-            NewButton.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+            NewButton.Size = UDim2.new(0, 350, 0, 38)
+            NewButton.BackgroundColor3 = Color3.fromRGB(38, 38, 48)
             NewButton.Text = btnName
             NewButton.TextColor3 = Color3.fromRGB(255, 255, 255)
             NewButton.Font = Enum.Font.GothamSemibold
-            NewButton.TextSize = 14
+            NewButton.TextSize = 13
             NewButton.Parent = Page
             
             local c = Instance.new("UICorner")
-            c.CornerRadius = UDim.new(0, 6)
+            c.CornerRadius = UDim.new(0, 5)
             c.Parent = NewButton
             
             NewButton.MouseButton1Click:Connect(callback)
             return NewButton
         end
         
-        -- Fungsi Membuat Slider Internal
+        -- Fungsi Membuat Toggle Dinamis (Sistem On/Off Centang)
+        function tabObj:CreateToggle(toggleConfig)
+            local toggleName = toggleConfig.Name or "Toggle"
+            local default = toggleConfig.Default or false
+            local callback = toggleConfig.Callback or function() end
+            
+            local state = default
+            
+            local ToggleFrame = Instance.new("TextButton")
+            ToggleFrame.Size = UDim2.new(0, 350, 0, 38)
+            ToggleFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 38)
+            ToggleFrame.Text = ""
+            ToggleFrame.Parent = Page
+            
+            local tfCorner = Instance.new("UICorner")
+            tfCorner.CornerRadius = UDim.new(0, 5)
+            tfCorner.Parent = ToggleFrame
+            
+            local ToggleLabel = Instance.new("TextLabel")
+            ToggleLabel.Size = UDim2.new(1, -50, 1, 0)
+            ToggleLabel.Position = UDim2.new(0, 12, 0, 0)
+            ToggleLabel.Text = toggleName
+            ToggleLabel.TextColor3 = Color3.fromRGB(210, 210, 210)
+            ToggleLabel.Font = Enum.Font.Gotham
+            ToggleLabel.TextSize = 13
+            ToggleLabel.TextXAlignment = Enum.TextXAlignment.Left
+            ToggleLabel.BackgroundTransparency = 1
+            ToggleLabel.Parent = ToggleFrame
+            
+            -- Kotak Status On/Off
+            local StatusBox = Instance.new("Frame")
+            StatusBox.Size = UDim2.new(0, 35, 0, 20)
+            StatusBox.Position = UDim2.new(1, -47, 0.5, -10)
+            StatusBox.BackgroundColor3 = state and Color3.fromRGB(45, 185, 110) or Color3.fromRGB(65, 65, 75)
+            StatusBox.Parent = ToggleFrame
+            
+            local sbCorner = Instance.new("UICorner")
+            sbCorner.CornerRadius = UDim.new(0, 10)
+            sbCorner.Parent = StatusBox
+            
+            local Indicator = Instance.new("Frame")
+            Indicator.Size = UDim2.new(0, 14, 0, 14)
+            Indicator.Position = state and UDim2.new(1, -17, 0.5, -7) or UDim2.new(0, 3, 0.5, -7)
+            Indicator.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            Indicator.Parent = StatusBox
+            
+            local indCorner = Instance.new("UICorner")
+            indCorner.CornerRadius = UDim.new(0, 7)
+            indCorner.Parent = Indicator
+            
+            local function updateToggleVisual()
+                StatusBox.BackgroundColor3 = state and Color3.fromRGB(45, 185, 110) or Color3.fromRGB(65, 65, 75)
+                Indicator.Position = state and UDim2.new(1, -17, 0.5, -7) or UDim2.new(0, 3, 0.5, -7)
+            end
+            
+            ToggleFrame.MouseButton1Click:Connect(function()
+                state = not state
+                updateToggleVisual()
+                callback(state)
+            end)
+            
+            return ToggleFrame
+        end
+        
+        -- Fungsi Membuat Slider Presisi
         function tabObj:CreateSlider(sliderConfig)
             local sliderName = sliderConfig.Name or "Slider"
-            local min = sliderConfig.Range[1] or 0
-            local max = sliderConfig.Range[2] or 100
-            local default = sliderConfig.CurrentValue or min
+            local min = sliderConfig.Min or 0
+            local max = sliderConfig.Max or 100
+            local default = sliderConfig.Default or min
             local callback = sliderConfig.Callback or function() end
             
             local SliderFrame = Instance.new("Frame")
-            SliderFrame.Size = UDim2.new(0, 360, 0, 50)
-            SliderFrame.BackgroundColor3 = Color3.fromRGB(32, 32, 40)
-            SliderFrame.Parent = Page
-            
-            local sfCorner = Instance.new("UICorner")
-            sfCorner.CornerRadius = UDim.new(0, 6)
-            sfCorner.Parent = SliderFrame
-            
-            local SliderLabel = Instance.new("TextLabel")
-            SliderLabel.Size = UDim2.new(1, -20, 0, 20)
-            SliderLabel.Position = UDim2.new(0, 10, 0, 5)
-            SliderLabel.Text = sliderName .. " : " .. tostring(default)
-            SliderLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
-            SliderLabel.Font = Enum.Font.Gotham
-            SliderLabel.TextSize = 12
-            SliderLabel.TextXAlignment = Enum.TextXAlignment.Left
-            SliderLabel.BackgroundTransparency = 1
-            SliderLabel.Parent = SliderFrame
-            
-            local SlideBar = Instance.new("TextButton")
-            SlideBar.Name = "Bar"
-            SlideBar.Size = UDim2.new(1, -20, 0, 8)
-            SlideBar.Position = UDim2.new(0, 10, 0, 32)
-            SlideBar.BackgroundColor3 = Color3.fromRGB(50, 50, 65)
-            SlideBar.Text = ""
-            SlideBar.Parent = SliderFrame
-            
-            local Fill = Instance.new("Frame")
-            Fill.Size = UDim2.new((default - min) / (max - min), 0, 1, 0)
-            Fill.BackgroundColor3 = Color3.fromRGB(100, 150, 255) -- Warna Biru Indikator
-            Fill.BorderSizePixel = 0
-            Fill.Parent = SlideBar
-            
-            -- Logika Menggeser Slider (Kompatibel HP & PC)
-            local function UpdateSlider()
-                local inputService = game:GetService("UserInputService")
-                local mousePos = inputService:GetMouseLocation().X
-                local barPos = SlideBar.AbsolutePosition.X
-                local barWidth = SlideBar.AbsoluteSize.X
-                local percentage = math.clamp((mousePos - barPos) / barWidth, 0, 1)
-                
-                Fill.Size = UDim2.new(percentage, 0, 1, 0)
-                local calculatedValue = math.floor(min + (max - min) * percentage)
-                SliderLabel.Text = sliderName .. " : " .. tostring(calculatedValue)
-                callback(calculatedValue)
-            end
-            
-            local dragging = false
-            SlideBar.InputBegan:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                    dragging = true
-                    UpdateSlider()
-                end
-            end)
-            
-            game:GetService("UserInputService").InputChanged:Connect(function(input)
-                if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-                    UpdateSlider()
-                end
-            end)
-            
+            SliderFrame.Size = UDim2.new(0, 350, 0, 48)
